@@ -12,10 +12,10 @@
 		<relativePath />
 	</parent>
 
-	<groupId>com.m01project</groupId>
-	<artifactId>task-manager</artifactId>
+	<groupId>com.shermatov</groupId>
+	<artifactId>car-parts</artifactId>
 	<version>1.0.0</version>
-	<name>task-manager</name>
+	<name>car-part</name>
 	<description>Full-stack task management (Spring Boot 3)</description>
 
 	<properties>
@@ -57,12 +57,12 @@
 		</dependency>
 
 		<!-- Devtools -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-devtools</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
 
 		<!-- DB Driver -->
 		<dependency>
@@ -75,6 +75,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.42</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -170,7 +171,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.m01project.taskmanager.CarParts</mainClass>
+					<mainClass>com.shermatov.carparts.CarParts</mainClass>
 				</configuration>
 			</plugin>
 
