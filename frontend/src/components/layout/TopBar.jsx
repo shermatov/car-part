@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react";    
 import {
   AppBar,
   Toolbar,
@@ -16,7 +16,7 @@ const TopBar = ({ onLogout }) => {
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-            Task Manager
+            Car Parts
           </Typography>
         </Box>
 

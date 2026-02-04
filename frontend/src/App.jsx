@@ -3,8 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
-import BoardPage from "./pages/BoardPage";
-import TodoPage from "./pages/TodoPage";
+import ShopPage from "./pages/ShopPage";
+import ProductPage from "./pages/ProductPage";
 import AdminUserPage from "./pages/AdminUserPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -14,8 +14,19 @@ import HomeLayout from "./components/layout/HomeLayout";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
       <Routes>
+
+        <Route path="/shops/:shopSlug" element={<ShopPage mode="public" />} />
+
+        <Route
+          path="/dashboard/shops/:shopId"
+          element={
+            <ProtectedRoute>
+              <ShopPage mode="admin" />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/" element={<Navigate to="/login" replace />} />
 
         <Route
@@ -55,21 +66,21 @@ function App() {
 
         {/* HOME */}
         <Route
-          path="/boards"
+          path="/shops"
           element={
             <ProtectedRoute>
               <HomeLayout>
-                <BoardPage />
+                <ShopPage />
               </HomeLayout>
             </ProtectedRoute>
           }
         />
         <Route
-          path="/boards/:boardId"
+          path="/shops/:shopTitle/products"
           element={
             <ProtectedRoute>
               <HomeLayout>
-                <TodoPage />
+                <ProductPage />
               </HomeLayout>
             </ProtectedRoute>
           }

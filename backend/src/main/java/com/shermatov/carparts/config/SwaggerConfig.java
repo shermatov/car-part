@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI taskManagerOpenAPI() {
+    public OpenAPI carPartsOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Task Manager API")
-                        .description("API documentation for Task Manager project")
+                        .title("Car Parts API")
+                        .description("API documentation for Car Parts project")
                         .version("v1.0")
                 )
                 .externalDocs(new ExternalDocumentation()
                         .description("Project GitHub repository")
-                        .url("https://github.com/m01-project-devs/task-manager")
+                        .url("https://github.com/shermatov/car-part")
                 );
     }
 }

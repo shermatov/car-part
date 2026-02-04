@@ -89,7 +89,10 @@ public class SecurityConfig {
 
                 // Configure authorization rules for different endpoints
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints - no authentication required
+
+                        /* =======================
+                           PUBLIC ENDPOINTS
+                           ======================= */
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/register",
@@ -99,10 +102,34 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        // Admin-only endpoints
-                        .requestMatchers("/api/users/**").hasRole("ADMIN")
+                        /* =======================
+                           ADMIN-ONLY ENDPOINTS
+                           ======================= */
+                        .requestMatchers(
+                                "/api/users",
+                                "/api/users/search",
+                                "/api/users/admins-only",
+                                "/api/users/{email}",
+                                "/api/users/users-only"
+                        ).hasRole("ADMIN")
 
-                        // All other endpoints require authentication
+                        /* =======================
+                           SHOP ENDPOINTS
+                           ======================= */
+                        .requestMatchers(
+                                "/api/shops/**"
+                        ).hasAnyRole("USER", "ADMIN")
+
+                        /* =======================
+                           PRODUCT ENDPOINTS
+                           ======================= */
+                        .requestMatchers(
+                                "/api/products/**"
+                        ).hasAnyRole("USER", "ADMIN")
+
+                        /* =======================
+                           EVERYTHING ELSE
+                           ======================= */
                         .anyRequest().authenticated()
                 )
 

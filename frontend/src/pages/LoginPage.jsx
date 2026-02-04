@@ -52,22 +52,31 @@ const LoginPage = () => {
 
       const data = await response.json();
 
-      // ===== SAVE TOKEN =====
+      // save token
       localStorage.setItem("token", data.token);
-      localStorage.setItem("email", email);
 
-      // ===== DECODE TOKEN =====
+      // decode token
       const decoded = jwt_decode(data.token);
-      const role = decoded.role;
+
+      // save user
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email: decoded.sub || email,
+          role: decoded.role,
+        })
+      );
+
+setSuccess(true);
 
       setSuccess(true);
 
       // ===== ROLE BASED REDIRECT =====
       setTimeout(() => {
-        if (role === "ADMIN") {
+        if (decoded.role === "ADMIN") {
           navigate("/users");
         } else {
-          navigate("/boards");
+          navigate("/shops");
         }
       }, 1000);
     } catch (err) {

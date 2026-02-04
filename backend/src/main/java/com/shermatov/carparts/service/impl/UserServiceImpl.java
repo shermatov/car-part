@@ -47,6 +47,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+
+
     @Override
     public User update(String email, UserUpdateRequestDto request) {
         if (request.getRole() != null && request.getRole().equalsIgnoreCase("ADMIN")) {
@@ -102,5 +104,6 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.search(trimmedQuery, Role.USER, pageable);
     }
+
 
 }
