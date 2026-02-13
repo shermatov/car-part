@@ -1,7 +1,7 @@
 services:
   postgres:
-    image: postgres:16-alpine
-    container_name: task-manager-db
+    image: postgres:17-alpine
+    container_name: car-parts-db
     restart: unless-stopped
     profiles: ["all", "db", "backend-db", "frontend-db"]
     env_file:
@@ -15,7 +15,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - task-manager-network
+      - car-parts-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 10s
@@ -24,7 +24,7 @@ services:
 
   backend:
     image: maven:3.9-eclipse-temurin-21
-    container_name: task-manager-backend
+    container_name: car-parts-backend
     working_dir: /app
     profiles: ["all", "backend-db"]
     volumes:
@@ -42,12 +42,12 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - task-manager-network
+      - car-parts-network
     command: mvn spring-boot:run
 
   frontend:
     image: node:20-alpine
-    container_name: task-manager-frontend
+    container_name: car-parts-frontend
     working_dir: /app
     profiles: ["all", "frontend-db"]
     volumes:
@@ -59,12 +59,12 @@ services:
     environment:
       VITE_API_URL: ${VITE_API_URL}
     networks:
-      - task-manager-network
+      - car-parts-network
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
 
 volumes:
   postgres_data:
 
 networks:
-  task-manager-network:
+  car-parts-network:
     driver: bridge

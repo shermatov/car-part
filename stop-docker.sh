@@ -43,7 +43,7 @@ $DOCKER_COMPOSE -f docker-compose.cloud.yml --profile all down --remove-orphans 
 # Clean up any remaining task-manager network
 if docker network ls | grep -q "task-manager-network"; then
     echo -e "${YELLOW}Removing task-manager-network...${NC}"
-    docker network rm task-manager-network 2>/dev/null || true
+    docker network rm car-parts-network 2>/dev/null || true
 fi
 
 echo -e "${GREEN}✅ Application stopped successfully!${NC}"

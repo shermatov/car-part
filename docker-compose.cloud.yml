@@ -3,7 +3,7 @@ version: "3.8"
 services:
   backend:
     image: maven:3.9-eclipse-temurin-21
-    container_name: task-manager-backend
+    container_name: car-parts-backend
     working_dir: /app
     volumes:
       - ./backend:/app

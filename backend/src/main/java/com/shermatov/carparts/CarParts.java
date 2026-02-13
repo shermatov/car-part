@@ -9,112 +9,112 @@ import java.nio.file.Paths;
 
 @Slf4j
 @SpringBootApplication(scanBasePackages = "com.shermatov")
-	public class CarParts {
+public class CarParts {
 
-	public static void main(String[] args) {
-		// Load .env file from project root for local development
-		loadEnvironmentVariables();
-		SpringApplication.run(CarParts.class, args);
-	}
+    public static void main(String[] args) {
+        // Load .env file from project root for local development
+        loadEnvironmentVariables();
+        SpringApplication.run(CarParts.class, args);
+    }
 
-	private static void loadEnvironmentVariables() {
-		try {
-			// Determine project root - check multiple possible locations
-			String projectRoot = findProjectRoot();
+    private static void loadEnvironmentVariables() {
+        try {
+            // Determine project root - check multiple possible locations
+            String projectRoot = findProjectRoot();
 
-			// Skip if .env doesn't exist (e.g., in Cloud Run)
-			if (!Paths.get(projectRoot, ".env").toFile().exists()) {
-				log.info("No .env file found - skipping environment variable loading (using system/Cloud Run env vars)");
-				return;
-			}
+            // Skip if .env doesn't exist (e.g., in Cloud Run)
+            if (!Paths.get(projectRoot, ".env").toFile().exists()) {
+                log.info("No .env file found - skipping environment variable loading (using system/Cloud Run env vars)");
+                return;
+            }
 
-			log.info("Loading .env from: {}", projectRoot);
+            log.info("Loading .env from: {}", projectRoot);
 
-			Dotenv dotenv = Dotenv.configure()
-					.directory(projectRoot)
-					.ignoreIfMissing()
-					.load();
+            Dotenv dotenv = Dotenv.configure()
+                    .directory(projectRoot)
+                    .ignoreIfMissing()
+                    .load();
 
-			// First pass: Load all variables
-			dotenv.entries().forEach(entry -> {
-				System.setProperty(entry.getKey(), entry.getValue());
-			});
+            // First pass: Load all variables
+            dotenv.entries().forEach(entry -> {
+                System.setProperty(entry.getKey(), entry.getValue());
+            });
 
-			// Second pass: Resolve variable interpolations (e.g., ${DB_HOST})
-			dotenv.entries().forEach(entry -> {
-				String resolvedValue = resolveVariables(entry.getValue());
-				System.setProperty(entry.getKey(), resolvedValue);
-				log.info("Loaded env: {} = {}", entry.getKey(), resolvedValue);
-			});
+            // Second pass: Resolve variable interpolations (e.g., ${DB_HOST})
+            dotenv.entries().forEach(entry -> {
+                String resolvedValue = resolveVariables(entry.getValue());
+                System.setProperty(entry.getKey(), resolvedValue);
+                log.info("Loaded env: {} = {}", entry.getKey(), resolvedValue);
+            });
 
-			log.info(".env file loaded successfully!");
-		} catch (Exception e) {
-			// Silently continue - environment variables might be set by Docker or system
-			log.info("Note: .env file not loaded (may be running in Docker): {}", e.getMessage());
-		}
-	}
+            log.info(".env file loaded successfully!");
+        } catch (Exception e) {
+            // Silently continue - environment variables might be set by Docker or system
+            log.info("Note: .env file not loaded (may be running in Docker): {}", e.getMessage());
+        }
+    }
 
-	private static String findProjectRoot() {
-		String currentDir = Paths.get("").toAbsolutePath().toString();
+    private static String findProjectRoot() {
+        String currentDir = Paths.get("").toAbsolutePath().toString();
 
-		// If we're in the backend folder, go up one level
-		if (currentDir.endsWith("backend")) {
-			return Paths.get("").toAbsolutePath().getParent().toString();
-		}
+        // If we're in the backend folder, go up one level
+        if (currentDir.endsWith("backend")) {
+            return Paths.get("").toAbsolutePath().getParent().toString();
+        }
 
-		// Otherwise, check if .env exists in current directory
-		if (Paths.get(currentDir, ".env").toFile().exists()) {
-			return currentDir;
-		}
+        // Otherwise, check if .env exists in current directory
+        if (Paths.get(currentDir, ".env").toFile().exists()) {
+            return currentDir;
+        }
 
-		// Try parent directory
-		String parentDir = Paths.get("").toAbsolutePath().getParent().toString();
-		if (Paths.get(parentDir, ".env").toFile().exists()) {
-			return parentDir;
-		}
+        // Try parent directory
+        String parentDir = Paths.get("").toAbsolutePath().getParent().toString();
+        if (Paths.get(parentDir, ".env").toFile().exists()) {
+            return parentDir;
+        }
 
-		// Default to current directory
-		return currentDir;
-	}
+        // Default to current directory
+        return currentDir;
+    }
 
-	private static String resolveVariables(String value) {
-		if (value == null || !value.contains("${")) {
-			return value;
-		}
+    private static String resolveVariables(String value) {
+        if (value == null || !value.contains("${")) {
+            return value;
+        }
 
-		String resolved = value;
-		int maxIterations = 10; // Prevent infinite loops
-		int iteration = 0;
+        String resolved = value;
+        int maxIterations = 10; // Prevent infinite loops
+        int iteration = 0;
 
-		while (resolved.contains("${") && iteration < maxIterations) {
-			String temp = resolved;
-			int startIdx = resolved.indexOf("${");
-			while (startIdx != -1) {
-				int endIdx = resolved.indexOf("}", startIdx);
-				if (endIdx != -1) {
-					String varName = resolved.substring(startIdx + 2, endIdx);
-					String varValue = System.getProperty(varName);
+        while (resolved.contains("${") && iteration < maxIterations) {
+            String temp = resolved;
+            int startIdx = resolved.indexOf("${");
+            while (startIdx != -1) {
+                int endIdx = resolved.indexOf("}", startIdx);
+                if (endIdx != -1) {
+                    String varName = resolved.substring(startIdx + 2, endIdx);
+                    String varValue = System.getProperty(varName);
 
-					if (varValue == null) {
-						varValue = System.getenv(varName);
-					}
+                    if (varValue == null) {
+                        varValue = System.getenv(varName);
+                    }
 
-					if (varValue != null) {
-						resolved = resolved.substring(0, startIdx) + varValue + resolved.substring(endIdx + 1);
-						break; // Restart the search after replacement
-					}
-				}
-				startIdx = resolved.indexOf("${", startIdx + 1);
-			}
+                    if (varValue != null) {
+                        resolved = resolved.substring(0, startIdx) + varValue + resolved.substring(endIdx + 1);
+                        break; // Restart the search after replacement
+                    }
+                }
+                startIdx = resolved.indexOf("${", startIdx + 1);
+            }
 
-			// If no change was made, break to avoid infinite loop
-			if (temp.equals(resolved)) {
-				break;
-			}
-			iteration++;
-		}
+            // If no change was made, break to avoid infinite loop
+            if (temp.equals(resolved)) {
+                break;
+            }
+            iteration++;
+        }
 
-		return resolved;
-	}
+        return resolved;
+    }
 
 }

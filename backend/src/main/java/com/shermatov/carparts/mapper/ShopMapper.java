@@ -13,6 +13,7 @@ public class ShopMapper {
         return ShopResponse.builder()
                 .id(shop.getId())
                 .name(shop.getName())
+                .phone(shop.getPhone())
                 .address(shop.getAddress())
                 .description(shop.getDescription())
                 .build();

@@ -55,8 +55,8 @@ const RegisterPage = () => {
   }, [formData.password]);
 
   const isPasswordValid = useMemo(
-    () => Object.values(passwordChecks).every((c) => c),
-    [passwordChecks],
+      () => Object.values(passwordChecks).every((c) => c),
+      [passwordChecks],
   );
 
   const handleChange = (e) => {
@@ -65,7 +65,7 @@ const RegisterPage = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
     if (name === "password") {
       setPasswordsMatch(
-        value === formData.confirmPassword || formData.confirmPassword === "",
+          value === formData.confirmPassword || formData.confirmPassword === "",
       );
     } else if (name === "confirmPassword") {
       setPasswordsMatch(value === formData.password);
@@ -114,7 +114,7 @@ const RegisterPage = () => {
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(
-          data.message || `Registration failed (${response.status})`,
+            data.message || `Registration failed (${response.status})`,
         );
       }
 
@@ -128,233 +128,233 @@ const RegisterPage = () => {
   };
 
   const RequirementItem = ({ met, text }) => (
-    <ListItem dense sx={{ py: 0 }}>
-      <ListItemIcon sx={{ minWidth: 30 }}>
-        {met ? (
-          <Check sx={{ color: "success.main", fontSize: 20 }} />
-        ) : (
-          <Circle sx={{ color: "grey.400", fontSize: 8 }} />
-        )}
-      </ListItemIcon>
-      <ListItemText
-        primary={text}
-        sx={{
-          color: met ? "success.main" : "text.secondary",
-          "& .MuiListItemText-primary": { fontSize: "0.875rem" },
-        }}
-      />
-    </ListItem>
+      <ListItem dense sx={{ py: 0 }}>
+        <ListItemIcon sx={{ minWidth: 30 }}>
+          {met ? (
+              <Check sx={{ color: "success.main", fontSize: 20 }} />
+          ) : (
+              <Circle sx={{ color: "grey.400", fontSize: 8 }} />
+          )}
+        </ListItemIcon>
+        <ListItemText
+            primary={text}
+            sx={{
+              color: met ? "success.main" : "text.secondary",
+              "& .MuiListItemText-primary": { fontSize: "0.875rem" },
+            }}
+        />
+      </ListItem>
   );
 
   return (
-    <Container maxWidth="sm">
-      <Box
-        sx={{
-          p: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          boxShadow: 3,
-          borderRadius: 2,
-          backgroundColor: "rgba(255, 255, 255, 0.2)",
-          backdropFilter: "blur(20px)",
-        }}
-      >
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
-          Create Account
-        </Typography>
-
+      <Container maxWidth="sm">
         <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ mt: 1, width: "100%" }}
-          noValidate
+            sx={{
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              boxShadow: 3,
+              borderRadius: 2,
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              backdropFilter: "blur(20px)",
+            }}
         >
-          <Box sx={{ display: { sm: "flex" }, gap: 2 }}>
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+            Create Account
+          </Typography>
+
+          <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ mt: 1, width: "100%" }}
+              noValidate
+          >
+            <Box sx={{ display: { sm: "flex" }, gap: 2 }}>
+              <TextField
+                  name="firstName"
+                  label="First Name"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  error={!!errors.firstName}
+                  helperText={errors.firstName}
+                  fullWidth
+                  margin="normal"
+                  required
+              />
+              <TextField
+                  name="lastName"
+                  label="Last Name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  error={!!errors.lastName}
+                  helperText={errors.lastName}
+                  fullWidth
+                  margin="normal"
+                  required
+              />
+            </Box>
+
             <TextField
-              name="firstName"
-              label="First Name"
-              value={formData.firstName}
-              onChange={handleChange}
-              error={!!errors.firstName}
-              helperText={errors.firstName}
-              fullWidth
-              margin="normal"
-              required
+                name="email"
+                label="Email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
+                fullWidth
+                margin="normal"
+                required
             />
+
             <TextField
-              name="lastName"
-              label="Last Name"
-              value={formData.lastName}
-              onChange={handleChange}
-              error={!!errors.lastName}
-              helperText={errors.lastName}
-              fullWidth
-              margin="normal"
-              required
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                error={
+                    !!errors.password &&
+                    formData.password.length > 0 &&
+                    !isPasswordValid
+                }
+                helperText={errors.password}
+                fullWidth
+                margin="normal"
+                required
+                InputProps={{
+                  endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                  ),
+                }}
             />
+
+            {formData.password.length > 0 && (
+                <Box sx={{ mt: 1, mb: 2, pl: 1 }}>
+                  <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ mb: 0.5, display: "block" }}
+                  >
+                    Password requirements:
+                  </Typography>
+                  <List dense disablePadding>
+                    <RequirementItem
+                        met={passwordChecks.length}
+                        text={`At least ${MIN_LENGTH} characters`}
+                    />
+                    <RequirementItem
+                        met={passwordChecks.uppercase}
+                        text="One uppercase letter (A-Z)"
+                    />
+                    <RequirementItem
+                        met={passwordChecks.lowercase}
+                        text="One lowercase letter (a-z)"
+                    />
+                    <RequirementItem
+                        met={passwordChecks.number}
+                        text="One number (0-9)"
+                    />
+                    <RequirementItem
+                        met={passwordChecks.special}
+                        text={`One special character (${SPECIAL_CHARS})`}
+                    />
+                    <RequirementItem
+                        met={passwordChecks.maxLength}
+                        text={`Maximum ${MAX_LENGTH} characters`}
+                    />
+                  </List>
+                </Box>
+            )}
+
+            <TextField
+                name="confirmPassword"
+                label="Confirm Password"
+                type={showPassword ? "text" : "password"}
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                error={!passwordsMatch || !!errors.confirmPassword}
+                helperText={
+                  !passwordsMatch && formData.confirmPassword !== ""
+                      ? "⚠️ Passwords do not match!"
+                      : errors.confirmPassword
+                }
+                fullWidth
+                margin="normal"
+                required
+                sx={{
+                  "& .MuiFormHelperText-root": {
+                    color:
+                        !passwordsMatch && formData.confirmPassword !== ""
+                            ? "error.main"
+                            : "inherit",
+                    fontWeight:
+                        !passwordsMatch && formData.confirmPassword !== ""
+                            ? "bold"
+                            : "normal",
+                  },
+                }}
+            />
+
+            <Collapse in={!passwordsMatch && formData.confirmPassword !== ""}>
+              <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
+                ❌ Passwords do not match! Please check both fields.
+              </Alert>
+            </Collapse>
+
+            <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                sx={{ mt: 2, py: 1.5, fontWeight: 600 }}
+                disabled={
+                    loading ||
+                    (formData.password.length > 0 && !isPasswordValid) ||
+                    !passwordsMatch
+                }
+            >
+              {loading ? "Creating Account..." : "Register"}
+            </Button>
           </Box>
 
-          <TextField
-            name="email"
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            error={!!errors.email}
-            helperText={errors.email}
-            fullWidth
-            margin="normal"
-            required
-          />
-
-          <TextField
-            name="password"
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            value={formData.password}
-            onChange={handleChange}
-            error={
-              !!errors.password &&
-              formData.password.length > 0 &&
-              !isPasswordValid
-            }
-            helperText={errors.password}
-            fullWidth
-            margin="normal"
-            required
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          {formData.password.length > 0 && (
-            <Box sx={{ mt: 1, mb: 2, pl: 1 }}>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ mb: 0.5, display: "block" }}
-              >
-                Password requirements:
-              </Typography>
-              <List dense disablePadding>
-                <RequirementItem
-                  met={passwordChecks.length}
-                  text={`At least ${MIN_LENGTH} characters`}
-                />
-                <RequirementItem
-                  met={passwordChecks.uppercase}
-                  text="One uppercase letter (A-Z)"
-                />
-                <RequirementItem
-                  met={passwordChecks.lowercase}
-                  text="One lowercase letter (a-z)"
-                />
-                <RequirementItem
-                  met={passwordChecks.number}
-                  text="One number (0-9)"
-                />
-                <RequirementItem
-                  met={passwordChecks.special}
-                  text={`One special character (${SPECIAL_CHARS})`}
-                />
-                <RequirementItem
-                  met={passwordChecks.maxLength}
-                  text={`Maximum ${MAX_LENGTH} characters`}
-                />
-              </List>
-            </Box>
-          )}
-
-          <TextField
-            name="confirmPassword"
-            label="Confirm Password"
-            type={showPassword ? "text" : "password"}
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            error={!passwordsMatch || !!errors.confirmPassword}
-            helperText={
-              !passwordsMatch && formData.confirmPassword !== ""
-                ? "⚠️ Passwords do not match!"
-                : errors.confirmPassword
-            }
-            fullWidth
-            margin="normal"
-            required
-            sx={{
-              "& .MuiFormHelperText-root": {
-                color:
-                  !passwordsMatch && formData.confirmPassword !== ""
-                    ? "error.main"
-                    : "inherit",
-                fontWeight:
-                  !passwordsMatch && formData.confirmPassword !== ""
-                    ? "bold"
-                    : "normal",
-              },
-            }}
-          />
-
-          <Collapse in={!passwordsMatch && formData.confirmPassword !== ""}>
-            <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
-              ❌ Passwords do not match! Please check both fields.
-            </Alert>
-          </Collapse>
-
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            size="large"
-            sx={{ mt: 2, py: 1.5, fontWeight: 600 }}
-            disabled={
-              loading ||
-              (formData.password.length > 0 && !isPasswordValid) ||
-              !passwordsMatch
-            }
-          >
-            {loading ? "Creating Account..." : "Register"}
-          </Button>
+          <Typography align="center" sx={{ mt: 3 }}>
+            Already have an account?{" "}
+            <Link component={RouterLink} to="/login" underline="hover">
+              Sign In
+            </Link>
+          </Typography>
         </Box>
 
-        <Typography align="center" sx={{ mt: 3 }}>
-          Already have an account?{" "}
-          <Link component={RouterLink} to="/login" underline="hover">
-            Sign In
-          </Link>
-        </Typography>
-      </Box>
+        <Snackbar
+            open={!!serverError}
+            autoHideDuration={6000}
+            onClose={() => setServerError("")}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="error" onClose={() => setServerError("")}>
+            {serverError}
+          </Alert>
+        </Snackbar>
 
-      <Snackbar
-        open={!!serverError}
-        autoHideDuration={6000}
-        onClose={() => setServerError("")}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity="error" onClose={() => setServerError("")}>
-          {serverError}
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={success}
-        autoHideDuration={2000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity="success">
-          Registration successful! Redirecting to login...
-        </Alert>
-      </Snackbar>
-    </Container>
+        <Snackbar
+            open={success}
+            autoHideDuration={2000}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="success">
+            Registration successful! Redirecting to login...
+          </Alert>
+        </Snackbar>
+      </Container>
   );
 };
 

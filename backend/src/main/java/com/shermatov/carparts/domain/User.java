@@ -2,11 +2,7 @@ package com.shermatov.carparts.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shermatov.carparts.domain.Base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

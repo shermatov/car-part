@@ -41,4 +41,9 @@ public class ShopController {
     public ResponseEntity<List<ShopResponse>> getMyShops() {
         return ResponseEntity.ok(shopService.getMyShops());
     }
+    @DeleteMapping("{shopId}")
+    public ResponseEntity<ShopResponse> deleteShop(@PathVariable Long shopId) {
+        shopService.deleteShop(shopId);
+        return ResponseEntity.ok().build();
+    }
 }

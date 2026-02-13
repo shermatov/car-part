@@ -16,5 +16,7 @@ public interface ShopService {
     List<ShopResponse> getAllShops();
 
     List<ShopResponse> getMyShops();
+
+    void deleteShop(Long shopId);
 }
 
