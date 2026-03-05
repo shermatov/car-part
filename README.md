@@ -207,9 +207,7 @@ The `.env` file contains helpful comments explaining each setup.
    ```
 
    The frontend will start on [http://localhost:3000](http://localhost:3000)
-   [https://roadmap.sh/projects/ecommerce-api
-   https://github.com/shermatov/car-part](https://roadmap.sh/projects/scalable-ecommerce-platform)
-
+     https://roadmap.sh/projects/scalable-ecommerce-platform
 ## Database Setup
 
 Database migrations are handled automatically by Flyway on application startup. No manual setup is required.
